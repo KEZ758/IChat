@@ -1,6 +1,6 @@
 //
 //  AddPhotoView.swift
-//  RChat
+// iChat
 //
 //  Created by Ерхан on 12.03.2024.
 //

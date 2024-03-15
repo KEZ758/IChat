@@ -1,6 +1,6 @@
 //
 //  UIImage + Extension.swift
-//  RChat
+//  iChat
 //
 //  Created by Ерхан on 11.03.2024.
 //
@@ -16,4 +16,12 @@ extension UIImageView {
         self.contentMode = contentMode
     }
     
+}
+
+extension UIImageView {
+    func setupColor(color: UIColor) {
+        let templateImage = self.image?.withRenderingMode(.alwaysTemplate)
+        self.image = templateImage
+        self.tintColor = color
+    }
 }

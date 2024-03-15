@@ -1,6 +1,6 @@
 //
 //  UILabel + Extension.swift
-//  RChat
+//  iChat
 //
 //  Created by Ерхан on 11.03.2024.
 //

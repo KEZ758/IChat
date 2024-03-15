@@ -1,6 +1,6 @@
 //
 //  UIColor + Extension.swift
-//  RChat
+//  iChat
 //
 //  Created by Ерхан on 11.03.2024.
 //
@@ -25,4 +25,7 @@ extension UIColor {
         return #colorLiteral(red: 0.9214347005, green: 0.9214347005, blue: 0.9214347005, alpha: 1)
     }
     
+    static func headerGray() -> UIColor {
+        return #colorLiteral(red: 0.5725490196, green: 0.5725490196, blue: 0.5725490196, alpha: 1)
+    }
 }

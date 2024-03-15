@@ -1,6 +1,6 @@
 //
 //  Bundle-Decodable.swift
-//  RChat
+//  iChat
 //
 //  Created by Ерхан on 13.03.2024.
 //

@@ -1,6 +1,6 @@
 //
 //  MainTabBarController.swift
-//  RChat
+// iChat
 //
 //  Created by Ерхан on 12.03.2024.
 //
@@ -12,6 +12,8 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tabBar.backgroundColor = .mainWhite()
+        
         let listViewController = ListViewController()
         let peopleViewController = PeopleViewController()
         
@@ -22,8 +24,8 @@ class MainTabBarController: UITabBarController {
         
         
         viewControllers = [
-            generateNavigationController(rootViewController: listViewController, title: "Conversations", image: convImage),
             generateNavigationController(rootViewController: peopleViewController, title: "People", image: peopleImage),
+            generateNavigationController(rootViewController: listViewController, title: "Conversations", image: convImage),
         ]
     }
     

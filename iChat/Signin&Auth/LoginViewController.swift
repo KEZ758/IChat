@@ -1,9 +1,8 @@
 //
 //  LoginViewController.swift
-//  IChat
+//  iChat
 //
-//  Created by Алексей Пархоменко on 26.01.2020.
-//  Copyright © 2020 Алексей Пархоменко. All rights reserved.
+//  Created by Ерхан on 12.03.2024.
 //
 
 import UIKit
