@@ -56,7 +56,7 @@ class LoginViewController: UIViewController {
                             let mainTabBar = MainTabBarController(currentUser: muser)
                             mainTabBar.modalPresentationStyle = .fullScreen
                             self.present(mainTabBar, animated: true, completion: nil)
-                        case .failure(let error):
+                        case .failure(_):
                             self.present(SetupProfileViewController(currentUser: user), animated: true, completion: nil)
                         }
                     }
@@ -111,7 +111,7 @@ extension LoginViewController {
         view.addSubview(bottomStackView)
         
         NSLayoutConstraint.activate([
-            welcomeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+            welcomeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
             welcomeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         
@@ -129,6 +129,13 @@ extension LoginViewController {
     }
 }
 
+// MARK: - keyBoard hiding
+extension LoginViewController: UITextFieldDelegate{
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        view.endEditing(true)
+    }
+}
 // MARK: - SwiftUI
 import SwiftUI
 

@@ -14,6 +14,7 @@ class OneLineTextField: UITextField {
         
         self.font = font
         self.borderStyle = .none
+        self.textColor = .black
         self.translatesAutoresizingMaskIntoConstraints = false
         
         var bottomView = UIView()

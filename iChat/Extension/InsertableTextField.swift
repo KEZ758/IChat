@@ -19,6 +19,7 @@ class InsertableTextField: UITextField {
         borderStyle = .none
         layer.cornerRadius = 18
         layer.masksToBounds = true
+        textColor = .black
         
         let image = UIImage(systemName: "smiley")
         let imageView = UIImageView(image: image)
@@ -66,25 +67,4 @@ class InsertableTextField: UITextField {
     }
 }
 
-// MARK: - SwiftUI
 
-import SwiftUI
-
-struct InsertableTFProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let ProfileVC = ProfileViewController()
-        
-        func makeUIViewController(context: Context) -> ProfileViewController {
-            ProfileVC
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-            
-        }
-    }
-}

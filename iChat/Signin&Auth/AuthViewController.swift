@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import GoogleSignIn
+import FirebaseCore
+import FirebaseAuth
 
 class AuthViewController: UIViewController {
 
@@ -31,6 +34,7 @@ class AuthViewController: UIViewController {
         
         emailButton.addTarget(self, action: #selector(emailButtonTapped), for: .touchUpInside)
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+//        googleButton.addTarget(self, action: #selector(signInWithGoogleAction), for: .touchUpInside)
         
         signUpVC.delegate = self
         loginVC.delegate = self
@@ -86,12 +90,63 @@ extension AuthViewController: AuthNavigationDelegate {
     func toSignUpVC() {
         present(signUpVC, animated: true, completion: nil)
     }
-    
-    
 }
+
+// MARK: - Google Auth
+//extension AuthViewController {
+//    
+//    @objc private func signInWithGoogleAction() {
+//        
+//        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+//        
+//        
+//        let config = GIDConfiguration(clientID: clientID)
+//        GIDSignIn.sharedInstance.configuration = config
+//        
+//        
+//        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [weak self] result, error in
+//            guard let _ = result, error == nil else { return }
+//            
+//            guard let user = result?.user, let idToken = user.idToken?.tokenString else { return }
+//            
+//            AuthService.shared.googleLogin(user: result?.user, error: error) { (result) in
+//                switch result {
+//                    
+//                case .success(let user):
+//                    FirestoreService.shared.getUserData(user: user) { (result) in
+//                        switch result {
+//                            
+//                        }
+//                case .failure(let error):
+//                    self.showAlert(with: "Ошибка", and: error.localizedDescription)
+//                }
+//            }
+//            
+//            self?.signInWithGoogle(idToken: idToken, accessToken: user.accessToken.tokenString)
+//            
+//            
+//            
+//        }
+//    }
+//    
+//    private func signInWithGoogle(idToken: String, accessToken: String) {
+//        
+//        let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
+//        Auth.auth().signIn(with: credential) { result, error in
+//            guard let _ = result, error == nil else { return }
+//            
+//        }
+//            
+//    }
+//    
+//    
+//    
+//    
+//}
 // MARK: - SwiftUI
 
 import SwiftUI
+import FirebaseCore
 
 struct AuthVCProvider: PreviewProvider {
     static var previews: some View {
