@@ -24,6 +24,7 @@ class ChatsViewController: MessagesViewController {
         super.init(nibName: nil, bundle: nil)
         
         title = chat.friendUsername
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
     }
     
     required init?(coder: NSCoder) {
@@ -96,11 +97,11 @@ class ChatsViewController: MessagesViewController {
         let picker = UIImagePickerController()
         picker.delegate = self
         
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            picker.sourceType = .camera
-        } else {
-            picker.sourceType = .photoLibrary
-        }
+//        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+//            picker.sourceType = .camera
+//        } else {
+//        }
+        picker.sourceType = .photoLibrary
         present(picker, animated: true, completion: nil)
     }
 }
@@ -267,6 +268,14 @@ extension ChatsViewController: UINavigationControllerDelegate, UIImagePickerCont
         picker.dismiss(animated: true, completion: nil)
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else { return }
         sendImage(image: image)
+    }
+}
+
+// MARK: - keyBoard hiding
+extension ChatsViewController: UITextFieldDelegate{
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        view.endEditing(true)
     }
 }
 

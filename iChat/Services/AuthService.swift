@@ -31,38 +31,23 @@ class AuthService {
         }
     }
     
-//    func googleLogin(user: GIDGoogleUser!, error: Error!, completion: @escaping (Result<User, Error>) -> Void) {
-//        if let error = error {
-//            completion(.failure(error))
-//            return
-//        }
-//        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-//        
-//        
-//        let config = GIDConfiguration(clientID: clientID)
-//        GIDSignIn.sharedInstance.configuration = config
-//        
-//        guard let userToken = user.idToken?.tokenString else { return }
-//        
-//        Auth.auth().signIn(withCustomToken: userToken) { (result, error) in
-//            guard let result = result else {
-//                completion(.failure(error!))
-//                return
-//            }
-//            completion(.success(result.user))
-//        }
-//        
-//    }
-//    
-//    private func signInWithGoogle(idToken: String, accessToken: String) {
-//        
-//        let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
-//        Auth.auth().signIn(with: credential) { result, error in
-//            guard let _ = result, error == nil else { return }
-//            
-//        }
-//            
-//    }
+    func googleLogin(user: GIDGoogleUser!, error: Error!, completion: @escaping (Result<User, Error>) -> Void) {
+        if let error = error {
+            completion(.failure(error))
+            return
+        }
+        
+        guard let user = user, let idToken = user.idToken?.tokenString else { return }
+        let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: user.accessToken.tokenString)
+        
+        Auth.auth().signIn(with: credential) { (result, error) in
+            guard let result = result else {
+                completion(.failure(error!))
+                return
+            }
+            completion(.success(result.user))
+        }
+    }
     
     func register(email: String?, password: String?, confirmPassword: String?, completion: @escaping (Result<User, Error>) -> Void) {
         

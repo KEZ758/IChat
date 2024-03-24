@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import GoogleSignIn
+import FirebaseAuth
+import FirebaseCore
 
 class LoginViewController: UIViewController {
     
@@ -40,6 +43,7 @@ class LoginViewController: UIViewController {
         
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         signUpButton.addTarget(self, action: #selector(signUpButtonTapped), for: .touchUpInside)
+        googleButton.addTarget(self, action: #selector(signInWithGoogleAction), for: .touchUpInside)
     }
     
     @objc private func loginButtonTapped() {
@@ -134,6 +138,50 @@ extension LoginViewController: UITextFieldDelegate{
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         view.endEditing(true)
+    }
+}
+
+// MARK: - Google Auth
+extension LoginViewController {
+    
+    @objc private func signInWithGoogleAction() {
+        
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        
+        
+        let config = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.configuration = config
+        
+        
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [weak self] result, error in
+            guard let self = self else { return }
+            
+            guard let _ = result, error == nil else { return }
+            
+            guard let user = result?.user, let idToken = user.idToken?.tokenString else { return }
+            
+            AuthService.shared.googleLogin(user: user, error: error) { (result) in
+                switch result {
+                case .success(let user):
+                    FirestoreService.shared.getUserData(user: user) { (result) in
+                        switch result {
+                        case .success(let muser):
+                            UIApplication.getTopViewController()?.showAlert(with: "Успешно", and: "Вы авторизованы") {
+                                let mainTabBar = MainTabBarController(currentUser: muser)
+                                mainTabBar.modalPresentationStyle = .fullScreen
+                                UIApplication.getTopViewController()?.present(mainTabBar, animated: true, completion: nil)
+                            }
+                        case .failure(_):
+                            UIApplication.getTopViewController()?.showAlert(with: "Успешно", and: "Вы зарегистрированны") {
+                                UIApplication.getTopViewController()?.present(SetupProfileViewController(currentUser: user), animated: true, completion: nil)
+                            }
+                        }
+                    }
+                case .failure(let error):
+                    self.showAlert(with: "Ошибка", and: error.localizedDescription)
+                }
+            }
+        }
     }
 }
 // MARK: - SwiftUI
