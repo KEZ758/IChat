@@ -89,7 +89,7 @@ class PeopleViewController: UIViewController {
         
         collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeader.reuseId)
         
-        collectionView.register(UserCell.self, forCellWithReuseIdentifier: UserCell.reusId)
+        collectionView.register(UserCell.self, forCellWithReuseIdentifier: UserCell.reuseId)
         
         collectionView.delegate = self
     }

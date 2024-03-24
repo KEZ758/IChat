@@ -33,6 +33,7 @@ class ChatRequestViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = .mainWhite()
         customizeElements()
         setupConstraints()
@@ -60,7 +61,6 @@ class ChatRequestViewController: UIViewController {
         aboutMeLabel.translatesAutoresizingMaskIntoConstraints = false
         denyButton.layer.borderWidth = 1.2
         denyButton.layer.borderColor = #colorLiteral(red: 0.8352941176, green: 0.2, blue: 0.2, alpha: 1)
-        
         containerView.backgroundColor = .mainWhite()
         containerView.layer.cornerRadius = 30
         
@@ -74,7 +74,6 @@ class ChatRequestViewController: UIViewController {
 }
 
 extension ChatRequestViewController {
-    
     private func setupConstraints() {
         view.addSubview(imageView)
         view.addSubview(containerView)
@@ -119,6 +118,5 @@ extension ChatRequestViewController {
             buttonsStackView.heightAnchor.constraint(equalToConstant: 56)
         ])
     }
-    
 }
 

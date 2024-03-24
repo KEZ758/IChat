@@ -14,7 +14,7 @@ class UserCell: UICollectionViewCell, SelfConfiguringCell {
     let userName = UILabel(text: "text", font: .laoSangamMN20())
     let containerView = UIView()
     
-    static var reusId: String = "UserCell"
+    static var reuseId: String = "UserCell"
     
     
     override init(frame: CGRect) {

@@ -8,7 +8,7 @@
 import UIKit
 
 class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
-    static var reusId: String = "ActiveChatCell"
+    static var reuseId: String = "ActiveChatCell"
     
     let friendImageView = UIImageView()
     let friendName = UILabel(text: "User name", font: .laoSangamMN20())
@@ -26,9 +26,9 @@ class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
     
     func configure<U>(with value: U) where U: Hashable {
         guard let chat: MChat = value as? MChat else { return }
-//        friendImageView.image = UIImage(named: chat.userImageString)
-//        friendName.text = chat.username
-//        lastMassage.text = chat.lastMessage
+        friendName.text = chat.friendUsername
+        lastMassage.text = chat.lastMessageContent
+        friendImageView.sd_setImage(with: URL(string: chat.friendAvatarStringURL), completed: nil)
     }
     
     required init?(coder: NSCoder) {

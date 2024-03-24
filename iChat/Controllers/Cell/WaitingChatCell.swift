@@ -9,7 +9,8 @@ import UIKit
 import SDWebImage
 
 class WaitingChatCell: UICollectionViewCell, SelfConfiguringCell {
-    static var reusId: String = "WaitingChatCell"
+    
+    static var reuseId: String = "WaitingChatCell"
     
     let friendImageView = UIImageView()
     
@@ -24,7 +25,6 @@ class WaitingChatCell: UICollectionViewCell, SelfConfiguringCell {
     
     func configure<U>(with value: U) where U: Hashable {
         guard let chat: MChat = value as? MChat else { return }
-//        friendImageView.image = UIImage(named: chat.userImageString)
         friendImageView.sd_setImage(with: URL(string: chat.friendAvatarStringURL), completed: nil)
         
     }

@@ -9,6 +9,9 @@ import FirebaseCore
 import FirebaseAuth
 import FirebaseFirestore
 
+import Firebase
+import FirebaseFirestore
+
 class FirestoreService {
     
     static let shared = FirestoreService()
@@ -21,6 +24,10 @@ class FirestoreService {
     
     private var waitingChatsRef: CollectionReference {
         return db.collection(["users", currentUser.id, "waitingChats"].joined(separator: "/"))
+    }
+    
+    private var activeChatsRef: CollectionReference {
+        return db.collection(["users", currentUser.id, "activeChats"].joined(separator: "/"))
     }
     
     var currentUser: MUser!
@@ -138,7 +145,7 @@ class FirestoreService {
     func getWaitingChatMessages(chat: MChat, completion: @escaping (Result<[MMessage], Error>) -> Void) {
         let reference = waitingChatsRef.document(chat.friendId).collection("messages")
         var messages = [MMessage]()
-        reference.getDocuments { querySnapshot, error in
+        reference.getDocuments { (querySnapshot, error) in
             if let error = error {
                 completion(.failure(error))
                 return
@@ -148,6 +155,80 @@ class FirestoreService {
                 messages.append(message)
             }
             completion(.success(messages))
+        }
+    }
+    
+    func changeToActive(chat: MChat, completion: @escaping (Result<Void, Error>) -> Void) {
+        getWaitingChatMessages(chat: chat) { (result) in
+            switch result {
+            case .success(let messages):
+                self.deleteWaitingChat(chat: chat) { (result) in
+                    switch result {
+                    case .success:
+                        self.createActiveChat(chat: chat, messages: messages) { (result) in
+                            switch result {
+                            case .success:
+                                completion(.success(Void()))
+                            case .failure(let error):
+                                completion(.failure(error))
+                            }
+                        }
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func createActiveChat(chat: MChat, messages: [MMessage], completion: @escaping (Result<Void, Error>) -> Void) {
+        let messageRef = activeChatsRef.document(chat.friendId).collection("messages")
+        activeChatsRef.document(chat.friendId).setData(chat.representation) { (error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            for message in messages {
+                messageRef.addDocument(data: message.representation) { (error) in
+                    if let error = error {
+                        completion(.failure(error))
+                        return
+                    }
+                    completion(.success(Void()))
+                }
+            }
+        }
+    }
+    
+    func sendMessage(chat: MChat, message: MMessage, completion: @escaping (Result<Void, Error>) -> Void) {
+        let friendRef = usersRef.document(chat.friendId).collection("activeChats").document(currentUser.id)
+        let friendMessageRef = friendRef.collection("messages")
+        let myMessageRef = usersRef.document(currentUser.id).collection("activeChats").document(chat.friendId).collection("messages")
+        
+        let chatForFriend = MChat(friendUsername: currentUser.username,
+                                  friendAvatarStringURL: currentUser.avatarStringURL,
+                                  friendId: currentUser.id,
+                                  lastMessageContent: message.content)
+        friendRef.setData(chatForFriend.representation) { (error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            friendMessageRef.addDocument(data: message.representation) { (error) in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                myMessageRef.addDocument(data: message.representation) { (error) in
+                    if let error = error {
+                        completion(.failure(error))
+                        return
+                    }
+                    completion(.success(Void()))
+                }
+            }
         }
     }
 }
